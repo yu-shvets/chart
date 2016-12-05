@@ -1,14 +1,20 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from .models import Region, Data
 from django.views.generic import ListView, View, DetailView
 from django.shortcuts import get_object_or_404
+from urllib.parse import unquote
 
 # Create your views here.
 
 
 def index(request):
 
-    data = Data.objects.filter(region='Южная Америка')
+    current_region = unquote(request.COOKIES.get('current_region'))
+
+    data = Data.objects.filter(region=current_region)
+
     regions = Region.objects.all()
 
     return render(request, 'index.html', {'data': data, 'regions': regions})
